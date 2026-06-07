@@ -2,16 +2,20 @@ const { product: Product } = require('../../models');
 
 exports.createProduct = async (req, res) => {
   try {
-    const product = await Product.create({
+    if (!req.user) {
+      return res.status(401).json({ message: 'User is missing' });
+    }
+
+    const product = await req.user.createProduct({
       title: req.body.title,
       price: req.body.price,
       imageUrl: req.body.imageUrl,
       description: req.body.description,
     });
 
-    res.status(201).json(product);
+    return res.status(201).json(product);
   } catch (err) {
-    res.status(400).json({ message: 'Could not create product', error: err.message });
+    return res.status(400).json({ message: 'Could not create product', error: err.message });
   }
 };
 

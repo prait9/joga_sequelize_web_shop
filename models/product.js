@@ -24,5 +24,17 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  Product.associate = models => {
+    Product.belongsTo(models.user);
+
+    if (models.cart) {
+      Product.belongsToMany(models.cart, { through: 'cartItems' });
+    }
+
+    if (models.order) {
+      Product.belongsToMany(models.order, { through: 'orderItems' });
+    }
+  };
+
   return Product;
 };

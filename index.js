@@ -13,12 +13,23 @@ app.get('/', (req, res) => {
   res.json({ message: 'Web shop app' });
 });
 
+app.use(async (req, res, next) => {
+  try {
+    const user = await models.user.findByPk(1);
+    req.user = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use('/products', productRoutes);
 app.use('/admin/products', adminProductRoutes);
 app.use('/admin/product', adminProductRoutes);
 
 sequelize
-  .sync()
+  .sync({ force: true })
+  .then(() => models.user.create({ name: 'Dummy User', email: 'dummy@example.com' }))
   .then(() => {
     console.log('Tables are synchronized');
     app.listen(3000, () => {
