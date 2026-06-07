@@ -1,26 +1,30 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const sequelize = require('./utils/db');
+const models = require('./models');
+const productRoutes = require('./routes/products');
+const adminProductRoutes = require('./routes/admin/products');
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-  res.send('Web shop app');
+  res.json({ message: 'Web shop app' });
 });
 
-const sequelize = require('./utils/db');
+app.use('/products', productRoutes);
+app.use('/admin/products', adminProductRoutes);
+app.use('/admin/product', adminProductRoutes);
 
 sequelize
-    .authenticate()
-    .then(() => {
-      console.log('Connected to database');
-    })
-    .catch(err => {
-      console.error('Error connecting to database:', err);
+  .sync()
+  .then(() => {
+    console.log('Tables are synchronized');
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
     });
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+  })
+  .catch(err => {
+    console.error(err);
+  });
