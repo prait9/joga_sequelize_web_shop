@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('./utils/db');
 const models = require('./models');
 const productRoutes = require('./routes/products');
+const orderRoutes = require('./routes/orders');
 const adminProductRoutes = require('./routes/admin/products');
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/products', productRoutes);
+app.use('/orders', orderRoutes);
 app.use('/admin/products', adminProductRoutes);
 app.use('/admin/product', adminProductRoutes);
 

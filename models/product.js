@@ -31,8 +31,8 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsToMany(models.cart, { through: models.cartItem });
     }
 
-    if (models.order) {
-      Product.belongsToMany(models.order, { through: 'orderItems' });
+    if (models.order && models.orderItem) {
+      Product.belongsToMany(models.order, { through: models.orderItem });
     }
   };
 
