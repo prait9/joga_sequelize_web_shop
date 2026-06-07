@@ -30,6 +30,7 @@ app.use('/admin/product', adminProductRoutes);
 sequelize
   .sync({ force: true })
   .then(() => models.user.create({ name: 'Dummy User', email: 'dummy@example.com' }))
+  .then(user => user.createCart())
   .then(() => {
     console.log('Tables are synchronized');
     app.listen(3000, () => {

@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   Product.associate = models => {
     Product.belongsTo(models.user);
 
-    if (models.cart) {
-      Product.belongsToMany(models.cart, { through: 'cartItems' });
+    if (models.cart && models.cartItem) {
+      Product.belongsToMany(models.cart, { through: models.cartItem });
     }
 
     if (models.order) {
